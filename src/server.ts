@@ -9,7 +9,9 @@ app.post("/courses", async (request: Request, response: Response) => {
 
   //aqui eu estou simplesmente recuperando o corpo da requisição, e usando para inserir no banco de dados.
   //o banco de dados esta sendo conectado pelo metodo knex() que estamos importando de knex.ts(que também esta se conectando com o knexfile.ts)
-  await knex("courses").insert({ name });
+  // await knex("courses").insert({ name });
+
+  await knex.raw("INSERT INTO courses (name) VALUES (?)", [name]);
 
   response.status(201).json();
 });
