@@ -35,4 +35,13 @@ app.put("/courses/:id", async (request: Request, response: Response) => {
   return response.json();
 });
 
+//Deletar
+app.delete("/courses/:id", async (request: Request, response: Response) => {
+  const { id } = request.params;
+
+  await knex("courses").delete().where({ id });
+
+  return response.json();
+});
+
 app.listen(3333, () => console.log(`Server is running on port 3333`));
