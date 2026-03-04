@@ -4,6 +4,7 @@ import { knex } from "./database/knex";
 const app = express();
 app.use(express.json());
 
+//Criar
 app.post("/courses", async (request: Request, response: Response) => {
   const { name } = request.body;
 
@@ -13,14 +14,25 @@ app.post("/courses", async (request: Request, response: Response) => {
 
   // await knex.raw("INSERT INTO courses (name) VALUES (?)", [name]);
 
-  response.status(201).json();
+  return response.status(201).json();
 });
 
+//Listar
 app.get("/courses", async (request: Request, response: Response) => {
   // const courses = await knex.raw("SELECT * FROM courses");
   const courses = await knex("courses").select().orderBy("name", "desc");
 
-  response.json(courses);
+  return response.json(courses);
+});
+
+//Atualizar
+app.put("/courses/:id", async (request: Request, response: Response) => {
+  const { id } = request.params;
+  const { name } = request.body;
+
+  await knex("courses").update({ name }).where({ id });
+
+  return response.json();
 });
 
 app.listen(3333, () => console.log(`Server is running on port 3333`));
