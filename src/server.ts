@@ -9,11 +9,18 @@ app.post("/courses", async (request: Request, response: Response) => {
 
   //aqui eu estou simplesmente recuperando o corpo da requisição, e usando para inserir no banco de dados.
   //o banco de dados esta sendo conectado pelo metodo knex() que estamos importando de knex.ts(que também esta se conectando com o knexfile.ts)
-  // await knex("courses").insert({ name });
+  await knex("courses").insert({ name });
 
-  await knex.raw("INSERT INTO courses (name) VALUES (?)", [name]);
+  // await knex.raw("INSERT INTO courses (name) VALUES (?)", [name]);
 
   response.status(201).json();
+});
+
+app.get("/courses", async (request: Request, response: Response) => {
+  // const courses = await knex.raw("SELECT * FROM courses");
+  const courses = await knex("courses").select().orderBy("name", "desc");
+
+  response.json(courses);
 });
 
 app.listen(3333, () => console.log(`Server is running on port 3333`));
