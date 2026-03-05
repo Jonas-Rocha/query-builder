@@ -5,7 +5,11 @@ export async function up(knex: Knex): Promise<void> {
     (table.increments("id").primary(),
       table.text("name").notNullable(),
       //aqui eu estou criando e conectando a tabela "course_id" que esta referenciado diretamente a tabela "id" de "courses"
-      table.integer("course_id").references("id").inTable("courses"));
+      table
+        .integer("course_id")
+        .notNullable()
+        .references("id")
+        .inTable("courses"));
   });
 }
 
