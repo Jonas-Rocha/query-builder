@@ -44,6 +44,7 @@ app.delete("/courses/:id", async (request: Request, response: Response) => {
   return response.json();
 });
 
+// Criando um modulo para um curso
 app.post("/modules", async (request: Request, response: Response) => {
   const { name, course_id } = request.body;
 
@@ -52,10 +53,27 @@ app.post("/modules", async (request: Request, response: Response) => {
   return response.status(201).json();
 });
 
+// Listando os modulos
 app.get("/modules", async (request: Request, response: Response) => {
   const modules = await knex("course_modules").select();
 
   return response.json(modules);
 });
+
+app.get(
+  "/courses/:id/modules",
+  async (request: Request, response: Response) => {
+    const courses = await knex("courses")
+      .select(
+        "courses.id AS course_id",
+        "course_modules.id AS module_id",
+        "course_modules.name AS module",
+        "courses.name AS course",
+      ) // se nas duas tabelas eu tenho colunas de nomes iguais, é bom renomear para não dar ambiguidade, e também para ficar mais intuitivo na hora de ver os dados.
+      .join("course_modules", "courses.id", "course_modules.course_id"); //courses.id("id" dentro de courses é a chave primária de courses)  e course_modules.course_id("course_id" é a chave estrangeira de course_modules), estamos conectando as duas para conectar as duas tabelas.
+
+    return response.json(courses);
+  },
+);
 
 app.listen(3333, () => console.log(`Server is running on port 3333`));
